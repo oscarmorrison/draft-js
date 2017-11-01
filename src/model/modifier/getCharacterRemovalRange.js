@@ -7,21 +7,21 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * @providesModule getCharacterRemovalRange
- * @typechecks
+ * @format
  * @flow
  */
 
 'use strict';
 
+import type ContentBlock from 'ContentBlock';
+import type {DraftRemovalDirection} from 'DraftRemovalDirection';
+import type {EntityMap} from 'EntityMap';
+import type SelectionState from 'SelectionState';
+
 var DraftEntitySegments = require('DraftEntitySegments');
 
 var getRangesForDraftEntity = require('getRangesForDraftEntity');
 var invariant = require('invariant');
-
-import type ContentBlock from 'ContentBlock';
-import type {DraftRemovalDirection} from 'DraftRemovalDirection';
-import type SelectionState from 'SelectionState';
-import type {EntityMap} from 'EntityMap';
 
 /**
  * Given a SelectionState and a removal direction, determine the entire range
@@ -47,7 +47,7 @@ function getCharacterRemovalRange(
     return selectionState;
   }
   var newSelectionState = selectionState;
-  if (startEntityKey && (startEntityKey === endEntityKey)) {
+  if (startEntityKey && startEntityKey === endEntityKey) {
     newSelectionState = getEntityRemovalRange(
       entityMap,
       startBlock,
@@ -136,7 +136,7 @@ function getEntityRemovalRange(
 
   // Find the entity range that overlaps with our removal range.
   var entityRanges = getRangesForDraftEntity(block, entityKey).filter(
-    (range) => sideToConsider <= range.end && sideToConsider >= range.start,
+    range => sideToConsider <= range.end && sideToConsider >= range.start,
   );
 
   invariant(

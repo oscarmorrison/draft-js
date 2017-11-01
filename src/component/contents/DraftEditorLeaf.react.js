@@ -7,7 +7,7 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * @providesModule DraftEditorLeaf.react
- * @typechecks
+ * @format
  * @flow
  */
 
@@ -65,7 +65,7 @@ type Props = {
  * DOM Selection API. In this way, top-level components can declaratively
  * maintain the selection state.
  */
-class DraftEditorLeaf extends React.Component {
+class DraftEditorLeaf extends React.Component<Props> {
   /**
    * By making individual leaf instances aware of their context within
    * the text of the editor, we can set our selection range more
@@ -75,6 +75,9 @@ class DraftEditorLeaf extends React.Component {
    * DOM structure of the DraftEditor component. If leaves had multiple
    * text nodes, this would be harder.
    */
+
+  leaf: ?HTMLElement;
+
   _setSelection(): void {
     const {selection} = this.props;
 
@@ -112,7 +115,7 @@ class DraftEditorLeaf extends React.Component {
   }
 
   shouldComponentUpdate(nextProps: Props): boolean {
-    const leafNode = ReactDOM.findDOMNode(this.refs.leaf);
+    const leafNode = ReactDOM.findDOMNode(this.leaf);
     invariant(leafNode, 'Missing leafNode');
     return (
       leafNode.textContent !== nextProps.text ||
@@ -129,7 +132,7 @@ class DraftEditorLeaf extends React.Component {
     this._setSelection();
   }
 
-  render(): React.Element<any> {
+  render(): React.Node {
     const {block} = this.props;
     let {text} = this.props;
 
@@ -146,13 +149,11 @@ class DraftEditorLeaf extends React.Component {
       const mergedStyles = {};
       const style = customStyleMap[styleName];
 
-      if (
-        style !== undefined &&
-        map.textDecoration !== style.textDecoration
-      ) {
+      if (style !== undefined && map.textDecoration !== style.textDecoration) {
         // .trim() is necessary for IE9/10/11 and Edge
-        mergedStyles.textDecoration =
-          [map.textDecoration, style.textDecoration].join(' ').trim();
+        mergedStyles.textDecoration = [map.textDecoration, style.textDecoration]
+          .join(' ')
+          .trim();
       }
 
       return Object.assign(map, style, mergedStyles);
@@ -166,7 +167,7 @@ class DraftEditorLeaf extends React.Component {
     return (
       <span
         data-offset-key={offsetKey}
-        ref="leaf"
+        ref={ref => (this.leaf = ref)}
         style={styleObj}>
         <DraftEditorTextNode>{text}</DraftEditorTextNode>
       </span>

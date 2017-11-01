@@ -7,21 +7,22 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * @providesModule DraftEditorProps
+ * @format
  * @flow
  */
 
 'use strict';
 
-import type {BidiDirection} from 'UnicodeBidiDirection';
 import type ContentBlock from 'ContentBlock';
 import type {DraftBlockRenderMap} from 'DraftBlockRenderMap';
 import type {DraftDragType} from 'DraftDragType';
 import type {DraftEditorCommand} from 'DraftEditorCommand';
-import type {DraftTextAlignment} from 'DraftTextAlignment';
-import type {DraftInlineStyle} from 'DraftInlineStyle';
 import type {DraftHandleValue} from 'DraftHandleValue';
+import type {DraftInlineStyle} from 'DraftInlineStyle';
+import type {DraftTextAlignment} from 'DraftTextAlignment';
 import type EditorState from 'EditorState';
 import type SelectionState from 'SelectionState';
+import type {BidiDirection} from 'UnicodeBidiDirection';
 
 export type DraftEditorProps = {
   /**
@@ -67,7 +68,7 @@ export type DraftEditorProps = {
   // A function that accepts a synthetic key event and returns
   // the matching DraftEditorCommand constant, or a custom string,
   // or null if no command should be invoked.
-  keyBindingFn: (e: SyntheticKeyboardEvent) => ?string,
+  keyBindingFn: (e: SyntheticKeyboardEvent<>) => ?string,
 
   // Set whether the `DraftEditor` component should be editable. Useful for
   // temporarily disabling edit behavior or allowing `DraftEditor` rendering
@@ -92,11 +93,11 @@ export type DraftEditorProps = {
 
   ariaActiveDescendantID?: string,
   ariaAutoComplete?: string,
+  ariaControls?: string,
   ariaDescribedBy?: string,
   ariaExpanded?: boolean,
-  ariaHasPopup?: boolean,
   ariaLabel?: string,
-  ariaOwneeID?: string,
+  ariaMultiline?: boolean,
 
   webDriverTestID?: string,
 
@@ -108,7 +109,7 @@ export type DraftEditorProps = {
   // Useful for managing special behavior for pressing the `Return` key. E.g.
   // removing the style from an empty list item.
   handleReturn?: (
-    e: SyntheticKeyboardEvent,
+    e: SyntheticKeyboardEvent<>,
     editorState: EditorState,
   ) => DraftHandleValue,
 
@@ -140,26 +141,28 @@ export type DraftEditorProps = {
   // Handle dropped files
   handleDroppedFiles?: (
     selection: SelectionState,
-    files: Array<Blob>
+    files: Array<Blob>,
   ) => DraftHandleValue,
 
   // Handle other drops to prevent default text movement/insertion behaviour
   handleDrop?: (
     selection: SelectionState,
     dataTransfer: Object,
-    isInternal: DraftDragType
+    isInternal: DraftDragType,
   ) => DraftHandleValue,
 
   /**
    * Non-cancelable event triggers.
    */
-  onEscape?: (e: SyntheticKeyboardEvent) => void,
-  onTab?: (e: SyntheticKeyboardEvent) => void,
-  onUpArrow?: (e: SyntheticKeyboardEvent) => void,
-  onDownArrow?: (e: SyntheticKeyboardEvent) => void,
+  onEscape?: (e: SyntheticKeyboardEvent<>) => void,
+  onTab?: (e: SyntheticKeyboardEvent<>) => void,
+  onUpArrow?: (e: SyntheticKeyboardEvent<>) => void,
+  onRightArrow?: (e: SyntheticKeyboardEvent<>) => void,
+  onDownArrow?: (e: SyntheticKeyboardEvent<>) => void,
+  onLeftArrow?: (e: SyntheticKeyboardEvent<>) => void,
 
-  onBlur?: (e: SyntheticEvent) => void,
-  onFocus?: (e: SyntheticEvent) => void,
+  onBlur?: (e: SyntheticEvent<>) => void,
+  onFocus?: (e: SyntheticEvent<>) => void,
 
   // Provide a map of inline style names corresponding to CSS style objects
   // that will be rendered for matching ranges.
@@ -179,7 +182,7 @@ export type DraftEditorDefaultProps = {
   blockRenderMap: DraftBlockRenderMap,
   blockRendererFn: (block: ContentBlock) => ?Object,
   blockStyleFn: (block: ContentBlock) => string,
-  keyBindingFn: (e: SyntheticKeyboardEvent) => ?string,
+  keyBindingFn: (e: SyntheticKeyboardEvent<>) => ?string,
   readOnly: boolean,
   spellCheck: boolean,
   stripPastedStyles: boolean,

@@ -7,11 +7,19 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * @providesModule DraftModifier
- * @typechecks
+ * @format
  * @flow
  */
 
 'use strict';
+
+import type {BlockMap} from 'BlockMap';
+import type ContentState from 'ContentState';
+import type {DraftBlockType} from 'DraftBlockType';
+import type {DraftInlineStyle} from 'DraftInlineStyle';
+import type {DraftRemovalDirection} from 'DraftRemovalDirection';
+import type SelectionState from 'SelectionState';
+import type {Map} from 'immutable';
 
 var CharacterMetadata = require('CharacterMetadata');
 var ContentStateInlineStyle = require('ContentStateInlineStyle');
@@ -28,14 +36,6 @@ var modifyBlockForContentState = require('modifyBlockForContentState');
 var removeEntitiesAtEdges = require('removeEntitiesAtEdges');
 var removeRangeFromContentState = require('removeRangeFromContentState');
 var splitBlockInContentState = require('splitBlockInContentState');
-
-import type {BlockMap} from 'BlockMap';
-import type ContentState from 'ContentState';
-import type {DraftBlockType} from 'DraftBlockType';
-import type {DraftInlineStyle} from 'DraftInlineStyle';
-import type {DraftRemovalDirection} from 'DraftRemovalDirection';
-import type {Map} from 'immutable';
-import type SelectionState from 'SelectionState';
 
 const {OrderedSet} = Immutable;
 
@@ -122,10 +122,7 @@ var DraftModifier = {
     fragment: BlockMap,
   ): ContentState {
     var withoutEntities = removeEntitiesAtEdges(contentState, targetRange);
-    var withoutText = removeRangeFromContentState(
-      withoutEntities,
-      targetRange,
-    );
+    var withoutText = removeRangeFromContentState(withoutEntities, targetRange);
 
     return insertFragmentIntoContentState(
       withoutText,
@@ -238,10 +235,8 @@ var DraftModifier = {
     selectionState: SelectionState,
     blockType: DraftBlockType,
   ): ContentState {
-    return modifyBlockForContentState(
-      contentState,
-      selectionState,
-      (block) => block.merge({type: blockType, depth: 0}),
+    return modifyBlockForContentState(contentState, selectionState, block =>
+      block.merge({type: blockType, depth: 0}),
     );
   },
 
@@ -250,10 +245,8 @@ var DraftModifier = {
     selectionState: SelectionState,
     blockData: Map<any, any>,
   ): ContentState {
-    return modifyBlockForContentState(
-      contentState,
-      selectionState,
-      (block) => block.merge({data: blockData}),
+    return modifyBlockForContentState(contentState, selectionState, block =>
+      block.merge({data: blockData}),
     );
   },
 
@@ -262,13 +255,10 @@ var DraftModifier = {
     selectionState: SelectionState,
     blockData: Map<any, any>,
   ): ContentState {
-    return modifyBlockForContentState(
-      contentState,
-      selectionState,
-      (block) => block.merge({data: block.getData().merge(blockData)}),
+    return modifyBlockForContentState(contentState, selectionState, block =>
+      block.merge({data: block.getData().merge(blockData)}),
     );
   },
-
 
   applyEntity: function(
     contentState: ContentState,

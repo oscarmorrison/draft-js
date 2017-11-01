@@ -7,17 +7,17 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * @providesModule modifyBlockForContentState
- * @typechecks
+ * @format
  * @flow
  */
 
 'use strict';
 
-const Immutable = require('immutable');
-
 import type ContentBlock from 'ContentBlock';
 import type ContentState from 'ContentState';
 import type SelectionState from 'SelectionState';
+
+const Immutable = require('immutable');
 
 const {Map} = Immutable;
 

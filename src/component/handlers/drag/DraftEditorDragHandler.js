@@ -7,11 +7,14 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * @providesModule DraftEditorDragHandler
- * @typechecks
+ * @format
  * @flow
  */
 
 'use strict';
+
+import type DraftEditor from 'DraftEditor.react';
+import type SelectionState from 'SelectionState';
 
 const DataTransfer = require('DataTransfer');
 const DraftModifier = require('DraftModifier');
@@ -20,11 +23,8 @@ const EditorState = require('EditorState');
 const findAncestorOffsetKey = require('findAncestorOffsetKey');
 const getTextContentFromFiles = require('getTextContentFromFiles');
 const getUpdatedSelectionState = require('getUpdatedSelectionState');
-const nullthrows = require('nullthrows');
-
-import type DraftEditor from 'DraftEditor.react';
-import type SelectionState from 'SelectionState';
 const isEventHandled = require('isEventHandled');
+const nullthrows = require('nullthrows');
 
 /**
  * Get a SelectionState for the supplied mouse event.
@@ -97,13 +97,10 @@ var DraftEditorDragHandler = {
       }
 
       getTextContentFromFiles(files, fileText => {
-        fileText && editor.update(
-          insertTextAtSelection(
-            editorState,
-            dropSelection,
-            fileText,
-          ),
-        );
+        fileText &&
+          editor.update(
+            insertTextAtSelection(editorState, dropSelection, fileText),
+          );
       });
       return;
     }
@@ -125,7 +122,6 @@ var DraftEditorDragHandler = {
       insertTextAtSelection(editorState, dropSelection, data.getText()),
     );
   },
-
 };
 
 function moveText(
@@ -137,11 +133,7 @@ function moveText(
     editorState.getSelection(),
     targetSelection,
   );
-  return EditorState.push(
-    editorState,
-    newContentState,
-    'insert-fragment',
-  );
+  return EditorState.push(editorState, newContentState, 'insert-fragment');
 }
 
 /**
@@ -158,11 +150,7 @@ function insertTextAtSelection(
     text,
     editorState.getCurrentInlineStyle(),
   );
-  return EditorState.push(
-    editorState,
-    newContentState,
-    'insert-fragment',
-  );
+  return EditorState.push(editorState, newContentState, 'insert-fragment');
 }
 
 module.exports = DraftEditorDragHandler;

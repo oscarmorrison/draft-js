@@ -7,29 +7,26 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * @providesModule AtomicBlockUtils
- * @typechecks
+ * @format
  * @flow
  */
 
 'use strict';
+
+import type {DraftInsertionType} from 'DraftInsertionType';
 
 const BlockMapBuilder = require('BlockMapBuilder');
 const CharacterMetadata = require('CharacterMetadata');
 const ContentBlock = require('ContentBlock');
 const DraftModifier = require('DraftModifier');
 const EditorState = require('EditorState');
-const SelectionState = require('SelectionState');
 const Immutable = require('immutable');
+const SelectionState = require('SelectionState');
 
 const generateRandomKey = require('generateRandomKey');
 const moveBlockInContentState = require('moveBlockInContentState');
 
-import type {DraftInsertionType} from 'DraftInsertionType';
-
-const {
-  List,
-  Repeat,
-} = Immutable;
+const {List, Repeat} = Immutable;
 
 const AtomicBlockUtils = {
   insertAtomicBlock: function(
@@ -102,9 +99,9 @@ const AtomicBlockUtils = {
 
     if (insertionMode === 'before' || insertionMode === 'after') {
       const targetBlock = contentState.getBlockForKey(
-        insertionMode === 'before' ?
-          targetRange.getStartKey() :
-          targetRange.getEndKey(),
+        insertionMode === 'before'
+          ? targetRange.getStartKey()
+          : targetRange.getEndKey(),
       );
 
       withMovedAtomicBlock = moveBlockInContentState(
@@ -163,10 +160,9 @@ const AtomicBlockUtils = {
 
     const newContent = withMovedAtomicBlock.merge({
       selectionBefore: selectionState,
-      selectionAfter: withMovedAtomicBlock.getSelectionAfter().set(
-        'hasFocus',
-        true,
-      ),
+      selectionAfter: withMovedAtomicBlock
+        .getSelectionAfter()
+        .set('hasFocus', true),
     });
 
     return EditorState.push(editorState, newContent, 'move-block');

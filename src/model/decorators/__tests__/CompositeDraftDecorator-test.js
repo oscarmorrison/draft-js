@@ -6,11 +6,11 @@
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
  *
- * @emails isaac, oncall+ui_infra
- * @typechecks
+ * @emails oncall+ui_infra
+ * @format
  */
 
-jest.unmock('CompositeDraftDecorator');
+jest.disableAutomock().mock('ContentState');
 
 var CompositeDraftDecorator = require('CompositeDraftDecorator');
 const ContentState = require('ContentState');
@@ -28,12 +28,9 @@ describe('CompositeDraftDecorator', () => {
   function searchWith(regex) {
     return function(block, callback, contentState) {
       var text = block.getText();
-      text.replace(
-        regex,
-        function(/*string*/ match, /*number*/ offset) {
-          callback(offset, offset + match.length);
-        },
-      );
+      text.replace(regex, function(/*string*/ match, /*number*/ offset) {
+        callback(offset, offset + match.length);
+      });
     };
   }
 

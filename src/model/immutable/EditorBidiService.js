@@ -7,18 +7,18 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * @providesModule EditorBidiService
- * @typechecks
+ * @format
  * @flow
  */
 
 'use strict';
 
+import type ContentState from 'ContentState';
+
 var Immutable = require('immutable');
 var UnicodeBidiService = require('UnicodeBidiService');
 
 var nullthrows = require('nullthrows');
-
-import type ContentState from 'ContentState';
 
 var {OrderedMap} = Immutable;
 

@@ -7,11 +7,14 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * @providesModule DraftEditorContents.react
- * @typechecks
+ * @format
  * @flow
  */
 
 'use strict';
+
+import type ContentBlock from 'ContentBlock';
+import type {BidiDirection} from 'UnicodeBidiDirection';
 
 const DraftEditorBlock = require('DraftEditorBlock.react');
 const DraftOffsetKey = require('DraftOffsetKey');
@@ -21,9 +24,6 @@ const React = require('React');
 const cx = require('cx');
 const joinClasses = require('joinClasses');
 const nullthrows = require('nullthrows');
-
-import type {BidiDirection} from 'UnicodeBidiDirection';
-import type ContentBlock from 'ContentBlock';
 
 type Props = {
   blockRendererFn: Function,
@@ -41,7 +41,7 @@ type Props = {
  * (for instance, ARIA props) must be allowed to update without affecting
  * the contents of the editor.
  */
-class DraftEditorContents extends React.Component {
+class DraftEditorContents extends React.Component<Props> {
   shouldComponentUpdate(nextProps: Props): boolean {
     const prevEditorState = this.props.editorState;
     const nextEditorState = nextProps.editorState;
@@ -70,10 +70,8 @@ class DraftEditorContents extends React.Component {
     // rendered state, there's nothing new to be done.
     if (
       prevEditorState === nextEditorState ||
-      (
-        nextNativeContent !== null &&
-        nextEditorState.getCurrentContent() === nextNativeContent
-      ) ||
+      (nextNativeContent !== null &&
+        nextEditorState.getCurrentContent() === nextNativeContent) ||
       (wasComposing && nowComposing)
     ) {
       return false;
@@ -91,11 +89,23 @@ class DraftEditorContents extends React.Component {
     );
   }
 
-  render(): React.Element<any> {
+  render(): React.Node {
     const {
+      /* $FlowFixMe(>=0.53.0 site=www,mobile) This comment suppresses an error
+       * when upgrading Flow's support for React. Common errors found when
+       * upgrading Flow's React support are documented at
+       * https://fburl.com/eq7bs81w */
       blockRenderMap,
       blockRendererFn,
+      /* $FlowFixMe(>=0.53.0 site=www,mobile) This comment suppresses an error
+       * when upgrading Flow's support for React. Common errors found when
+       * upgrading Flow's React support are documented at
+       * https://fburl.com/eq7bs81w */
       customStyleMap,
+      /* $FlowFixMe(>=0.53.0 site=www,mobile) This comment suppresses an error
+       * when upgrading Flow's support for React. Common errors found when
+       * upgrading Flow's React support are documented at
+       * https://fburl.com/eq7bs81w */
       customStyleFn,
       editorState,
     } = this.props;
@@ -144,13 +154,12 @@ class DraftEditorContents extends React.Component {
         tree: editorState.getBlockTree(key),
       };
 
-      const configForType = blockRenderMap.get(blockType);
+      const configForType =
+        blockRenderMap.get(blockType) || blockRenderMap.get('unstyled');
       const wrapperTemplate = configForType.wrapper;
 
-      const Element = (
-        configForType.element ||
-        blockRenderMap.get('unstyled').element
-      );
+      const Element =
+        configForType.element || blockRenderMap.get('unstyled').element;
 
       const depth = block.getDepth();
       let className = this.props.blockStyleFn(block);
@@ -158,11 +167,10 @@ class DraftEditorContents extends React.Component {
       // List items are special snowflakes, since we handle nesting and
       // counters manually.
       if (Element === 'li') {
-        const shouldResetCount = (
+        const shouldResetCount =
           lastWrapperTemplate !== wrapperTemplate ||
           currentDepth === null ||
-          depth > currentDepth
-        );
+          depth > currentDepth;
         className = joinClasses(
           className,
           getListItemClasses(blockType, depth, shouldResetCount, direction),
@@ -173,6 +181,10 @@ class DraftEditorContents extends React.Component {
       let childProps = {
         className,
         'data-block': true,
+        /* $FlowFixMe(>=0.53.0 site=www,mobile) This comment suppresses an
+         * error when upgrading Flow's support for React. Common errors found
+         * when upgrading Flow's React support are documented at
+         * https://fburl.com/eq7bs81w */
         'data-editor': this.props.editorKey,
         'data-offset-key': offsetKey,
         key,
@@ -188,6 +200,10 @@ class DraftEditorContents extends React.Component {
       const child = React.createElement(
         Element,
         childProps,
+        /* $FlowFixMe(>=0.53.0 site=www,mobile) This comment suppresses an
+         * error when upgrading Flow's support for React. Common errors found
+         * when upgrading Flow's React support are documented at
+         * https://fburl.com/eq7bs81w */
         <Component {...componentProps} />,
       );
 
@@ -253,8 +269,7 @@ function getListItemClasses(
   return cx({
     'public/DraftStyleDefault/unorderedListItem':
       type === 'unordered-list-item',
-    'public/DraftStyleDefault/orderedListItem':
-      type === 'ordered-list-item',
+    'public/DraftStyleDefault/orderedListItem': type === 'ordered-list-item',
     'public/DraftStyleDefault/reset': shouldResetCount,
     'public/DraftStyleDefault/depth0': depth === 0,
     'public/DraftStyleDefault/depth1': depth === 1,

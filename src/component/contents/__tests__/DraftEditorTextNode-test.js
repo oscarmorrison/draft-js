@@ -6,13 +6,13 @@
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
  *
- * @emails isaac, oncall+ui_infra
+ * @emails oncall+ui_infra
+ * @format
  */
 
 'use strict';
 
-jest.unmock('DraftEditorTextNode.react')
-  .mock('UserAgent');
+jest.disableAutomock().mock('UserAgent');
 
 var BLOCK_DELIMITER_CHAR = '\n';
 var TEST_A = 'Hello';
@@ -27,7 +27,7 @@ describe('DraftEditorTextNode', function() {
   var container;
 
   beforeEach(function() {
-    jest.resetModuleRegistry();
+    jest.resetModules();
     container = document.createElement('div');
   });
 
@@ -194,7 +194,9 @@ describe('DraftEditorTextNode', function() {
   it('must render properly into a parent DOM node', function() {
     initializeAsNonIE();
     renderIntoContainer(
-      <div><DraftEditorTextNode>{TEST_A}</DraftEditorTextNode></div>,
+      <div>
+        <DraftEditorTextNode>{TEST_A}</DraftEditorTextNode>
+      </div>,
     );
   });
 

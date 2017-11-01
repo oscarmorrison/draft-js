@@ -7,20 +7,20 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * @providesModule getDraftEditorSelectionWithNodes
- * @typechecks
+ * @format
  * @flow
  */
 
 'use strict';
+
+import type {DOMDerivedSelection} from 'DOMDerivedSelection';
+import type EditorState from 'EditorState';
 
 var findAncestorOffsetKey = require('findAncestorOffsetKey');
 var getSelectionOffsetKeyForNode = require('getSelectionOffsetKeyForNode');
 var getUpdatedSelectionState = require('getUpdatedSelectionState');
 var invariant = require('invariant');
 var nullthrows = require('nullthrows');
-
-import type {DOMDerivedSelection} from 'DOMDerivedSelection';
-import type EditorState from 'EditorState';
 
 type SelectionPoint = {
   key: string,
@@ -148,7 +148,7 @@ function getPointForNonTextNode(
 
   invariant(
     offsetKey != null ||
-    editorRoot && (editorRoot === node || editorRoot.firstChild === node),
+      (editorRoot && (editorRoot === node || editorRoot.firstChild === node)),
     'Unknown node in selection range.',
   );
 

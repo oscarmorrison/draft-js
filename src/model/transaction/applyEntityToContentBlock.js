@@ -7,15 +7,15 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * @providesModule applyEntityToContentBlock
- * @typechecks
+ * @format
  * @flow
  */
 
 'use strict';
 
-var CharacterMetadata = require('CharacterMetadata');
-
 import type ContentBlock from 'ContentBlock';
+
+var CharacterMetadata = require('CharacterMetadata');
 
 function applyEntityToContentBlock(
   contentBlock: ContentBlock,

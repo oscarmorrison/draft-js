@@ -7,18 +7,18 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * @providesModule applyEntityToContentState
- * @typechecks
+ * @format
  * @flow
  */
 
 'use strict';
 
+import type ContentState from 'ContentState';
+import type SelectionState from 'SelectionState';
+
 var Immutable = require('immutable');
 
 var applyEntityToContentBlock = require('applyEntityToContentBlock');
-
-import type ContentState from 'ContentState';
-import type SelectionState from 'SelectionState';
 
 function applyEntityToContentState(
   contentState: ContentState,
@@ -39,12 +39,7 @@ function applyEntityToContentState(
     .map((block, blockKey) => {
       const sliceStart = blockKey === startKey ? startOffset : 0;
       const sliceEnd = blockKey === endKey ? endOffset : block.getLength();
-      return applyEntityToContentBlock(
-        block,
-        sliceStart,
-        sliceEnd,
-        entityKey,
-      );
+      return applyEntityToContentBlock(block, sliceStart, sliceEnd, entityKey);
     });
 
   return contentState.merge({
