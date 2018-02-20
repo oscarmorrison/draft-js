@@ -13,10 +13,10 @@
 
 'use strict';
 
+import type {BlockNodeRecord} from 'BlockNodeRecord';
 import type {DraftInlineStyle} from 'DraftInlineStyle';
 import type SelectionState from 'SelectionState';
 
-var ContentBlock = require('ContentBlock');
 const DraftEditorTextNode = require('DraftEditorTextNode.react');
 var React = require('React');
 var ReactDOM = require('ReactDOM');
@@ -26,7 +26,7 @@ var setDraftEditorSelection = require('setDraftEditorSelection');
 
 type Props = {
   // The block that contains this leaf.
-  block: ContentBlock,
+  block: BlockNodeRecord,
 
   // Mapping of style names to CSS declarations.
   customStyleMap: Object,
@@ -44,7 +44,7 @@ type Props = {
 
   // The current `SelectionState`, used to represent a selection range in the
   // editor
-  selection: SelectionState,
+  selection: ?SelectionState,
 
   // The offset of this string within its block.
   start: number,
@@ -117,11 +117,11 @@ class DraftEditorLeaf extends React.Component<Props> {
   shouldComponentUpdate(nextProps: Props): boolean {
     const leafNode = ReactDOM.findDOMNode(this.leaf);
     invariant(leafNode, 'Missing leafNode');
-    return (
+    const shouldUpdate =
       leafNode.textContent !== nextProps.text ||
       nextProps.styleSet !== this.props.styleSet ||
-      nextProps.forceSelection
-    );
+      nextProps.forceSelection;
+    return shouldUpdate;
   }
 
   componentDidUpdate(): void {
